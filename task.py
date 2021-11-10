@@ -20,16 +20,21 @@ class TaskId:
   def from_int(cls, id: int):
     return TaskId(str(id))
   
-  def __eq__(self, other):
+  def __eq__(self, other) -> bool:
     if isinstance(other, TaskId):
         return self.id == other.id
     return False
 
-@dataclass(frozen = True)
+@dataclass
 class Task:
   task_id: TaskId
   description: str
   due_date: date = date.today()
 
-  # def deadline(self, due_date: date) -> None:
-  #   self.due_date = due_date
+  def __eq__(self, other) -> bool:
+    if isinstance(other, Task):
+        return self.task_id == other.task_id
+    return False
+
+  def set_deadline(self, due_date: date) -> None:
+    self.due_date = due_date

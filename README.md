@@ -19,11 +19,14 @@ You should be able to give the list with tasks the following commands:
 
 Make a plan
 
-1. Create a task with a description
-2. Extend with an option due date
-3. An empty task list
+1. Create a task with a mandatory integer ID and description as string
+  - Tasks with equal ID should be equal
+  - Tasks with negative ID should not be allowed
+  - Empty descriptions should not be allowed
+2. Create an empty task list
   - Should be empty
   - Should throw an exception when requesting a task by ID
+3. Adding tasks
   - Should be able to accept a new task with integer ID
   - Should throw an exception if the same new task is added twice
 
@@ -31,3 +34,4 @@ Make a plan
 ### References
 
 - [Task list kata](https://kata-log.rocks/task-list-kata)
+- [Expects matchers](https://expects.readthedocs.io/en/stable/matchers.html#)

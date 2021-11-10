@@ -37,7 +37,8 @@ with description(TaskList) as self:
     with context("with a task added for tomorrow"):
       with before.each:
         tomorrow = date.today() + timedelta(days=1)
-        self.my_task = Task(TaskId.from_int(1), "Clean living room", tomorrow)
+        self.my_task = Task(TaskId.from_int(1), "Clean living room")
+        self.my_task.set_deadline(tomorrow)
         self.my_task_list.add(self.my_task)
 
       with it("should contain the task for tomorrow"):
