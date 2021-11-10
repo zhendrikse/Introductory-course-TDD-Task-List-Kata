@@ -27,6 +27,9 @@ class TaskId:
 
 @dataclass(frozen = True)
 class Task:
-    task_id: TaskId
-    description: str
-    due_date: date = date.today()
+  task_id: TaskId
+  description: str
+  due_date: date = date.today()
+
+  # def deadline(self, due_date: date) -> None:
+  #   self.due_date = due_date
