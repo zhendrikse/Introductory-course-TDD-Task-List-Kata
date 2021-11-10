@@ -1,7 +1,20 @@
 from datetime import date
+from dataclasses import dataclass
 
-class Task:
-  def __init__(self, id: int, description: str, due_date: date = date.today):
+class TaskId:
+  def __init__(self, id: str):
     self.id = id
-    self.description = description
-    self.due_date = due_date
+
+  @classmethod
+  def from_string(cls, id: str):
+    return TaskId(id)
+
+  @classmethod
+  def from_int(cls, id: int):
+    return TaskId(str(id))
+
+@dataclass(frozen = True)
+class Task:
+    task_id: TaskId
+    description: str
+    due_date: date = date.today()

@@ -10,6 +10,7 @@ mamba = "^0.11.2"
 py-expect = "^0.1.2"
 expects = "^0.9.0"
 coverage = "^6.0.2"
+mypy = "^0.910"
 [tool.poetry.dev-dependencies]
 
 [build-system]
