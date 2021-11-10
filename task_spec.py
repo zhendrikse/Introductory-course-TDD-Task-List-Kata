@@ -2,6 +2,7 @@ from mamba import description, it, context, before
 from expects import expect, equal, raise_error
 from datetime import date
 from task import Task, TaskId
+from task_list import TaskList
 
 with description(Task) as self:
 
@@ -26,5 +27,5 @@ with description(TaskId):
       expect(TaskId("123")).to(equal(TaskId("123")))
     with it("should be unequal to an unequal ID"):
       expect(TaskId("123")).not_to(equal(TaskId("1")))
-    # with it("should be unequal to another class"):
-    #   expect(TaskId("123")).not_to(equal(Task("1", "Dummy")))
+    with it("should be unequal to another class"):
+      expect(TaskId.from_string("123")).not_to(equal(TaskList()))
