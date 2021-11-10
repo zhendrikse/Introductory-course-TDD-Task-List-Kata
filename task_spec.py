@@ -20,3 +20,11 @@ with description(Task) as self:
   with it("should throw an exception when ID contains special characters"):
     expect(lambda: TaskId("1#3")).to(raise_error(ValueError, "ID contains special characters"))
 
+with description(TaskId):
+  with context("Given a task ID"):
+    with it("should be equal to an equal ID"):
+      expect(TaskId("123")).to(equal(TaskId("123")))
+    with it("should be unequal to an unequal ID"):
+      expect(TaskId("123")).not_to(equal(TaskId("1")))
+    # with it("should be unequal to another class"):
+    #   expect(TaskId("123")).not_to(equal(Task("1", "Dummy")))

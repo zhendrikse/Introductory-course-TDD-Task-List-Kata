@@ -19,6 +19,11 @@ class TaskId:
   @classmethod
   def from_int(cls, id: int):
     return TaskId(str(id))
+  
+  def __eq__(self, other):
+    if isinstance(other, TaskId):
+        return self.id == other.id
+    return False
 
 @dataclass(frozen = True)
 class Task:
