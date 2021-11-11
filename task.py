@@ -7,9 +7,13 @@ class Task:
     self.validate_description(description)
 
     self.description = description
-    self.id = id if type(id) is str else str(id)
+    self.id_int = -1 if type(id) is str else id
+    self.id_string = id if type(id) is str else str(id)
     self.deadline = date.today()
     self.has_deadline = False
+
+  def get_id(self) -> Union[int, str]:
+    return self.id_string if self.id_int == -1 else self.id_int
 
   def get_deadline(self) -> Union[date, None]:
     return self.deadline if self.has_deadline else None

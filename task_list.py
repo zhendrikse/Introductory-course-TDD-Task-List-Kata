@@ -8,7 +8,7 @@ class TaskList:
     self.tasks = tasks
 
   def get_tasks_by_id(self, id:str) -> List[Task]:
-    return [x for x in self.tasks if (x.id == id)]
+    return [x for x in self.tasks if (x.id_string == id)]
 
   def has_task_with_id(self, id: str) -> bool:
     return len(self.get_tasks_by_id(id)) > 0

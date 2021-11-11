@@ -19,9 +19,11 @@ with description(Task) as self:
     
     with it("should create a task when integer ID is non-negative"):
       expect(Task(0, "todo")).to(be_a(Task))
+      expect(Task(0, "todo").get_id()).to(equal(0))
     
     with it("should create a task when ID is alphanumeric"):
       expect(Task("ab1234", "todo")).to(be_a(Task))
+      expect(Task("ab1234", "todo").get_id()).to(equal("ab1234"))
 
   with description("Given a task") as self:
     with before.each:
