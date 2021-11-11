@@ -1,40 +1,25 @@
 from datetime import date
-from dataclasses import dataclass
+from typing import Union
 
-class TaskId:
-  def __init__(self, id: str):
-    self.validate_id(id)
-    self.id = id
-
-  def validate_id(self, id:str) -> None:
-    if (" " in id):
-      raise ValueError("ID contains spaces")
-    if not id.isalnum():
-      raise ValueError("ID contains special characters")
-  
-  @classmethod
-  def from_string(cls, id: str):
-    return TaskId(id)
-
-  @classmethod
-  def from_int(cls, id: int):
-    return TaskId(str(id))
-  
-  def __eq__(self, other) -> bool:
-    if isinstance(other, TaskId):
-        return self.id == other.id
-    return False
-
-@dataclass
 class Task:
-  task_id: TaskId
-  description: str
-  due_date: date = date.today()
+  def __init__(self, id:int, description: str) -> None:
+    self.validate_parameters(id, description)
 
-  def __eq__(self, other) -> bool:
-    if isinstance(other, Task):
-        return self.task_id == other.task_id
-    return False
+    self.description = description
+    self.id = id
+    self.deadline = date.today()
+    self.has_deadline = False
 
-  def set_deadline(self, due_date: date) -> None:
-    self.due_date = due_date
+  def get_deadline(self) -> Union[date, None]:
+    return self.deadline if self.has_deadline else None
+
+  def set_deadline(self, due_date:date) -> None:
+    self.has_deadline = True
+    self.deadline = due_date
+
+  def validate_parameters(self, id:int, description: str) -> None:
+    if id < 0:
+      raise ValueError("ID cannot be negative")
+    if not description:
+      raise ValueError("Description cannot be empty")
+  
