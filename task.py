@@ -3,7 +3,8 @@ from typing import Union
 
 class Task:
   def __init__(self, id:Union[int, str], description: str) -> None:
-    self.validate_parameters(id, description)
+    self.validate_id(id)
+    self.validate_description(description)
 
     self.description = description
     self.id = id if type(id) is str else str(id)
@@ -27,12 +28,13 @@ class Task:
       if id < 0:
         raise ValueError("ID cannot be negative")
 
-  def validate_parameters(self, id:Union[int, str], description: str) -> None:
-    if type(id) is int:
-      self.validate_int_id(id)
-    elif type(id) is str:
-      self.validate_string_id(id)
-
+  def validate_description(self, description:str) -> None:
     if not description:
       raise ValueError("Description cannot be empty")
   
+  def validate_id(self, id:Union[int, str]) -> None:
+    if type(id) is int:
+      self.validate_int_id(id)
+    if type(id) is str:
+      self.validate_string_id(id)
+
