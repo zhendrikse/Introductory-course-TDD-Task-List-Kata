@@ -2,7 +2,7 @@ from datetime import date
 from typing import Union
 
 class Task:
-  def __init__(self, id:int, description: str) -> None:
+  def __init__(self, id:Union[int, str], description: str) -> None:
     self.validate_parameters(id, description)
 
     self.description = description
@@ -17,9 +17,9 @@ class Task:
     self.has_deadline = True
     self.deadline = due_date
 
-  def validate_parameters(self, id:int, description: str) -> None:
-    if id < 0:
-      raise ValueError("ID cannot be negative")
+  def validate_parameters(self, id:Union[int, str], description: str) -> None:
+    if type(id) is int and id < 0:
+        raise ValueError("ID cannot be negative")
     if not description:
       raise ValueError("Description cannot be empty")
   

@@ -46,7 +46,7 @@ with description(TaskList) as self:
     with it("should not be empty"):
       expect(self.my_task_list.is_empty()).to(equal(False))
 
-    with it("should return empty list when sent the today command"):
+    with it("should return empty list when sent the today query"):
       expect(self.my_task_list.handle_query("today")).to(be_empty)
 
     with it("should throw exception when deadline command is given wrong ID"):
@@ -61,7 +61,7 @@ with description(TaskList) as self:
         deadline = datetime.strptime("20-10-2021", '%d-%m-%Y').date()
         expect(task.get_deadline()).to(equal(deadline))
         
-      with it("should return empty list when sent the today command"):
+      with it("should return empty list when sent the today query"):
         expect(self.my_task_list.handle_query("today")).to(be_empty)
 
     with description("And the deadline has been set equal to today"):
