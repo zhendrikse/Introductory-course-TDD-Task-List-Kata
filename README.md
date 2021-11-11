@@ -17,6 +17,8 @@ You should be able to give the list with tasks the following commands:
   - View tasks by deadline with the `view by deadline` query.
   - Don’t remove the functionality that allows users to view tasks by project, but change the query to `view by project`.
 
+Please also take into consideration the [Considerations and Approaches](https://kata-log.rocks/task-list-kata) section from the original kata description.
+
 # Implementation
 
 Let's implement the requirements one by one.

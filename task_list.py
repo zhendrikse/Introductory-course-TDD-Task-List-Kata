@@ -19,23 +19,13 @@ class TaskList:
       raise ValueError("No such task")
     return self.get_tasks_by_id(id)[0]
 
+  def update_task(self, task_id: str, deadline: date) -> None:
+      task = self.get_task_by_id(task_id)
+      task.set_deadline(deadline)
+
   def is_empty(self) -> bool:
     return len(self.tasks) == 0
 
-  def handle_query(self, querty: str) -> List[Task]:
+  def todays_tasks(self) -> List[Task]:
     return [x for x in self.tasks if x.get_deadline() == date.today()]
     #return filter(lambda x: x.due_date == date.today(), self.tasks)
-
-  def handle_deadline_command(self, arguments:List[str]) -> None:
-      if len(arguments) != 3:
-        raise ValueError("Invalid arguments")
-      task_id = arguments[1]
-      task_date = datetime.strptime(arguments[2], '%d-%m-%Y').date()
-      task = self.get_task_by_id(task_id)
-      task.set_deadline(task_date)
-
-  def handle_command(self, command: str) -> None:
-    if command.startswith("deadline"):
-      self.handle_deadline_command(command.split(" "))
-    else:
-      raise ValueError("Invalid command")
