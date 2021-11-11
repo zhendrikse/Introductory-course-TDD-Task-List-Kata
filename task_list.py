@@ -1,5 +1,5 @@
 from typing import List
-from datetime import datetime
+from datetime import datetime, date
 from task import Task
 
 class TaskList:
@@ -19,7 +19,8 @@ class TaskList:
     return len(self.tasks) == 0
 
   def handle_query(self, querty: str) -> List[Task]:
-    return []
+    return [x for x in self.tasks if x.get_deadline() == date.today()]
+    #return filter(lambda x: x.due_date == date.today(), self.tasks)
 
   def handle_deadline_command(self, arguments:List[str]) -> None:
       if len(arguments) != 3:
