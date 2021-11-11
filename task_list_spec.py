@@ -73,11 +73,13 @@ with description(TaskList) as self:
 
   with context("Given a task list with two tasks"):
     with before.each:
-      self.my_task_list = TaskList([Task(1, "todo"), Task(2, "todo")])
+      self.task1 = Task(1, "todo")
+      self.task2 = Task(2, "todo")
+      self.my_task_list = TaskList([self.task1, self.task2])
 
     with it("should not be empty"):
       expect(self.my_task_list.is_empty()).to(equal(False))
 
     with it("should be able to retrieve second task by ID"):
-      expect(self.my_task_list.get_task_by_id(2).id).to(equal(2))
+      expect(self.my_task_list.get_task_by_id(2)).to(equal(self.task2))
 

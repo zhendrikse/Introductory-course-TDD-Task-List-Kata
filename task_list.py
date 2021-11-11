@@ -1,18 +1,20 @@
 from typing import List
 from datetime import datetime, date
+from typing import Union
 from task import Task
 
 class TaskList:
   def __init__(self, tasks: List[Task]) -> None:
     self.tasks = tasks
 
-  def get_tasks_by_id(self, id:int) -> List[Task]:
+  def get_tasks_by_id(self, id:str) -> List[Task]:
     return [x for x in self.tasks if (x.id == id)]
 
-  def has_task_with_id(self, id: int) -> bool:
+  def has_task_with_id(self, id: str) -> bool:
     return len(self.get_tasks_by_id(id)) > 0
 
-  def get_task_by_id(self, id: int) -> Task:
+  def get_task_by_id(self, task_id: Union[int, str]) -> Task:
+    id = task_id if type(task_id) is str else str(task_id)
     if not self.has_task_with_id(id):
       raise ValueError("No such task")
     return self.get_tasks_by_id(id)[0]
@@ -27,7 +29,7 @@ class TaskList:
   def handle_deadline_command(self, arguments:List[str]) -> None:
       if len(arguments) != 3:
         raise ValueError("Invalid arguments")
-      task_id = int(arguments[1])
+      task_id = arguments[1]
       task_date = datetime.strptime(arguments[2], '%d-%m-%Y').date()
       task = self.get_task_by_id(task_id)
       task.set_deadline(task_date)

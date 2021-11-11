@@ -6,7 +6,7 @@ class Task:
     self.validate_parameters(id, description)
 
     self.description = description
-    self.id = id
+    self.id = id if type(id) is str else str(id)
     self.deadline = date.today()
     self.has_deadline = False
 
@@ -17,9 +17,22 @@ class Task:
     self.has_deadline = True
     self.deadline = due_date
 
-  def validate_parameters(self, id:Union[int, str], description: str) -> None:
-    if type(id) is int and id < 0:
+  def validate_string_id(self, id:str) -> None:
+    if (" " in id):
+      raise ValueError("ID contains spaces")
+    if not id.isalnum():
+      raise ValueError("ID contains special characters")
+
+  def validate_int_id(self, id:int) -> None:
+      if id < 0:
         raise ValueError("ID cannot be negative")
+
+  def validate_parameters(self, id:Union[int, str], description: str) -> None:
+    if type(id) is int:
+      self.validate_int_id(id)
+    elif type(id) is str:
+      self.validate_string_id(id)
+
     if not description:
       raise ValueError("Description cannot be empty")
   
