@@ -1,8 +1,8 @@
 from mamba import description, it, context, before
-from expects import expect, equal, be_empty, raise_error
+from expects import expect, equal, be_empty, raise_error, have_length
 from datetime import datetime
 from task_list import TaskList
-from task import Task
+from task import Task, TaskId
 from command_handler import CommandHandler
 from query_handler import QueryHandler
 
@@ -60,7 +60,7 @@ with description(TaskList) as self:
 
   with context("Given a task list with one task"):
     with before.each:
-      self.my_task_list = TaskList([Task(1, "todo")])
+      self.my_task_list = TaskList([Task(TaskId(1), "todo")])
 
     with it("should not be empty"):
       expect(self.my_task_list.is_empty()).to(equal(False))
@@ -90,12 +90,12 @@ with description(TaskList) as self:
         today_as_string = datetime.today().strftime("%d-%m-%Y")
         CommandHandler(self.my_task_list).handle_command("deadline 1 " + today_as_string)
         tasks_today = QueryHandler(self.my_task_list).handle_query("today")
-        expect(len(tasks_today)).to(equal(1))
+        expect(tasks_today).to(have_length(1))
 
   with context("Given a task list with two tasks"):
     with before.each:
-      self.task1 = Task(1, "todo")
-      self.task2 = Task(2, "todo")
+      self.task1 = Task(TaskId(1), "todo")
+      self.task2 = Task(TaskId(2), "todo")
       self.my_task_list = TaskList([self.task1, self.task2])
 
     with it("should not be empty"):

@@ -71,6 +71,16 @@ These type cases can then be distinguished like so:
       self.validate_string_id(id)
 ```
 
+### Refactoring: single responsibility principle
+
+#### Task ID
+
+You may want to move the task ID related logic into its own (value) object. 
+
+#### Command handling
+
+Command handling should not be a responsibility of the task list. The command handling logic should therefore also be moved to its own classes.
+
 ## Implementing the delete command
 
 
