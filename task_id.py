@@ -24,3 +24,8 @@ class TaskId:
       raise ValueError("ID contains spaces")
     if not id.isalnum():
       raise ValueError("ID contains special characters")
+  
+  def __eq__(self, other):
+    if isinstance(other, TaskId):
+        return self.id_string == other.id_string
+    return False

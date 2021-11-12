@@ -1,6 +1,6 @@
-from mamba import description, it
+from mamba import description, it, context
 from expects import expect, equal, raise_error, be_a
-from task import TaskId
+from task import TaskId, Task
 
 with description(TaskId) as self:
   with description("Creating a task ID"):
@@ -20,3 +20,19 @@ with description(TaskId) as self:
     with it("should create a task when ID is alphanumeric"):
       expect(TaskId("ab1234")).to(be_a(TaskId))
       expect(TaskId("ab1234").get_value()).to(equal("ab1234"))
+
+    with context("Given a task ID as int"):
+      with it("should be equal to an equal ID"):
+        expect(TaskId(123)).to(equal(TaskId(123)))
+      with it("should be unequal to an unequal ID"):
+        expect(TaskId(123)).not_to(equal(TaskId(1)))
+      with it("should be unequal to another class"):
+        expect(TaskId(123)).not_to(equal(Task(TaskId(0), "todo")))      
+
+    with context("Given a task ID as string"):
+      with it("should be equal to an equal ID"):
+        expect(TaskId("123")).to(equal(TaskId("123")))
+      with it("should be unequal to an unequal ID"):
+        expect(TaskId("123")).not_to(equal(TaskId("1")))
+      with it("should be unequal to another class"):
+        expect(TaskId("123")).not_to(equal(Task(TaskId(0), "todo")))      

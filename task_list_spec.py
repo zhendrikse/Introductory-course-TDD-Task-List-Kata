@@ -12,7 +12,7 @@ with description(TaskList) as self:
       expect(TaskList([]).is_empty()).to(equal(True))
 
     with it("should throw exception when no task with given ID exists"):
-      expect(lambda: TaskList([]).get_task_by_id(1)).to(raise_error(ValueError, "No such task"))
+      expect(lambda: TaskList([]).get_task_by_id(TaskId(1))).to(raise_error(ValueError, "No such task"))
 
     with description("When sending today query"):
       with it("should return empty list"):
@@ -78,7 +78,7 @@ with description(TaskList) as self:
         CommandHandler(self.my_task_list).handle_command("deadline 1 20-10-2021")
       
       with it("should have set the deadline for the contained task"):
-        task = self.my_task_list.get_task_by_id(1)
+        task = self.my_task_list.get_task_by_id(TaskId(1))
         deadline = datetime.strptime("20-10-2021", '%d-%m-%Y').date()
         expect(task.get_deadline()).to(equal(deadline))
         
@@ -102,5 +102,5 @@ with description(TaskList) as self:
       expect(self.my_task_list.is_empty()).to(equal(False))
 
     with it("should be able to retrieve second task by ID"):
-      expect(self.my_task_list.get_task_by_id(2)).to(equal(self.task2))
+      expect(self.my_task_list.get_task_by_id(TaskId(2))).to(equal(self.task2))
 

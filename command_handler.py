@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 from task_list import TaskList
-
+from task_id import TaskId
 
 class CommandHandler:
   def __init__(self, tasklist:TaskList) -> None:
@@ -10,7 +10,7 @@ class CommandHandler:
   def handle_deadline_command(self, arguments:List[str]) -> None:
       if len(arguments) != 3:
         raise ValueError("Invalid arguments")
-      task_id = arguments[1]
+      task_id = TaskId(arguments[1])
       task_date = datetime.strptime(arguments[2], '%d-%m-%Y').date()
       self.tasklist.update_task(task_id, task_date)
 
