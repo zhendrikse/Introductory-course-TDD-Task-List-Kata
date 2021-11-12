@@ -17,7 +17,9 @@ You should be able to give the list with tasks the following commands:
   - View tasks by deadline with the `view by deadline` query.
   - Don’t remove the functionality that allows users to view tasks by project, but change the query to `view by project`.
 
-Please also take into consideration the [Considerations and Approaches](https://kata-log.rocks/task-list-kata) section from the original kata description.
+Please also take into consideration the [Considerations and Approaches](https://kata-log.rocks/task-list-kata) section from the original kata description. At least alwyas segregate commands (that don't return anything and modify the state of the system) and queries (returning values but leaving the state of the system invariant).
+
+Last but not least: verify all the time you have 100% test coverage. As soon as you get below 100%, you wrote production code that you did not specify/test yet!
 
 # Implementation
 
@@ -49,6 +51,27 @@ As discussed in the first course, let's first make a plan.
     - Make the command return an empty list when invoked on an empty task list
     - Make the command return the task of today after setting deadline of a task to today
     - Make the command return an empty list after setting deadline of a task to tomorrow
+
+## Implementing ID as string
+
+The main challenge here is to generalze the existing code base in (extremely) small steps. A possible solution is to use Python's unions:
+
+```python
+class Task:
+  def __init__(self, id:Union[int, str], description: str) -> None:
+```
+
+These type cases can then be distinguished like so: 
+
+```python
+  def validate_id(self, id:Union[int, str]) -> None:
+    if type(id) is int:
+      self.validate_int_id(id)
+    if type(id) is str:
+      self.validate_string_id(id)
+```
+
+## Implementing the delete command
 
 
 ### References
