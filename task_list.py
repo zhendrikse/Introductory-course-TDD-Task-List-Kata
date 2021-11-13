@@ -21,6 +21,10 @@ class TaskList:
       task = self.get_task_by_id(task_id)
       task.set_deadline(deadline)
 
+  def delete_task(self, task_id: TaskId) -> None:
+      task = self.get_task_by_id(task_id)
+      self.tasks.remove(task)
+
   def is_empty(self) -> bool:
     return len(self.tasks) == 0
 

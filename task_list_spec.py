@@ -24,6 +24,20 @@ with description(TaskList) as self:
           lambda: CommandHandler(TaskList([])).handle_command("")
         ).to(raise_error(ValueError, "Invalid command"))
 
+    with context("When sending a delete command"):
+      with before.each:
+        self.command_handler = CommandHandler(TaskList([]))
+
+      with it("should throw exception when command is not followed by an ID"):
+        expect(
+          lambda: self.command_handler.handle_command("delete")
+        ).to(raise_error(ValueError, "Invalid arguments"))     
+
+      with it("should throw exception when no task with given ID exists"):
+        expect(
+          lambda: self.command_handler.handle_command("delete 1")
+        ).to(raise_error(ValueError, "No such task"))
+
     with context("When sending a deadline command"):
       with before.each:
         self.command_handler = CommandHandler(TaskList([]))
@@ -68,6 +82,11 @@ with description(TaskList) as self:
     with it("should return empty list when sent the today query"):
       expect(QueryHandler(self.my_task_list).handle_query("today")).to(be_empty)
 
+    with description("When sent a delete command"):
+      with it("should delete the single task"):
+        CommandHandler(self.my_task_list).handle_command("delete 1")
+        expect(self.my_task_list.is_empty()).to(equal(True))
+ 
     with it("should throw exception when deadline command is given wrong ID"):
       expect(
         lambda: CommandHandler(self.my_task_list).handle_command("deadline 11 20-11-2021")
