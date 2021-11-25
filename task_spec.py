@@ -1,23 +1,23 @@
-from mamba import description, it, before
-from expects import expect, equal, raise_error
+from mamba import description, it, before, context
+from expects import expect, be_none, raise_error, equal
 from datetime import date
 from task import Task, TaskId
 
 with description(Task) as self:
-  with description("Creating a task"):
-    with it("should throw an exception when ID contains non-alphanumeric chars"):
+  with context("When creating a task"):
+    with it("throws an exception when ID contains non-alphanumeric chars"):
       expect(lambda: Task(TaskId("1#2"), "todo")).to(raise_error(ValueError, "ID contains special characters"))
 
-    with it("should throw an exception when description is empty"):
+    with it("throws an exception when description is empty"):
       expect(lambda: Task(TaskId(1), "")).to(raise_error(ValueError, "Description cannot be empty"))
 
-  with description("Given a task") as self:
+  with description("When setting a deadline on a task") as self:
     with before.each:
       self.task = Task(TaskId(0), "todo")
     
-    with it("should not have a deadline set"):
-      expect(self.task.get_deadline()).to(equal(None))
+    with it("does not have any deadline beforehand"):
+      expect(self.task.get_deadline()).to(be_none)
     
-    with it("should return deadline when set"):
+    with it("has deadline set"):
       self.task.set_deadline(date.today())
       expect(self.task.get_deadline()).to(equal(date.today()))
