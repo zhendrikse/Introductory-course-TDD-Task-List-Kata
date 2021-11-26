@@ -3,14 +3,23 @@ from datetime import date
 from task import Task, TaskId
 
 class TaskList:
-  def __init__(self, tasks: List[Task]) -> None:
-    self.tasks = tasks
+  def __init__(self) -> None:
+    self.tasks:List[Task] = []
+
+  def add_tasks(self, tasks: List[Task]) -> None:
+    for task in tasks:
+      self.add_task(task)
+
+  def add_task(self, task:Task) -> None:
+    if self.has_task_with_id(task.get_id()):
+      raise ValueError("Duplicate ID")
+    self.tasks.append(task)
 
   def get_tasks_by_id(self, id:TaskId) -> List[Task]:
     return [x for x in self.tasks if (x.get_id() == id)]
 
   def has_task_with_id(self, id: TaskId) -> bool:
-    return len(self.get_tasks_by_id(id)) > 0
+    return any(self.get_tasks_by_id(id))
 
   def get_task_by_id(self, task_id: TaskId) -> Task:
     if not self.has_task_with_id(task_id):
@@ -25,8 +34,8 @@ class TaskList:
       task = self.get_task_by_id(task_id)
       self.tasks.remove(task)
 
-  def is_empty(self) -> bool:
-    return len(self.tasks) == 0
+  def count(self) -> int:
+    return len(self.tasks)
 
   def todays_tasks(self) -> List[Task]:
     return [x for x in self.tasks if x.get_deadline() == date.today()]

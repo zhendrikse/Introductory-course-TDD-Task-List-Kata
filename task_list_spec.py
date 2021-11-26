@@ -1,5 +1,5 @@
 from mamba import description, it, context, before
-from expects import expect, equal, be_empty, raise_error, have_length, be_true, be_false
+from expects import expect, be_empty, raise_error, have_length, be, equal
 from datetime import datetime
 from task_list import TaskList
 from task import Task, TaskId
@@ -9,24 +9,39 @@ from query_handler import QueryHandler
 with description(TaskList) as self:
   with context("Given a new empty task list"):
     with it("contains no elements"):
-      expect(TaskList([]).is_empty()).to(be_true)
+      expect(TaskList().count()).to(be(0))
 
-    with it("throws an exception when no task with given ID exists"):
-      expect(lambda: TaskList([]).get_task_by_id(TaskId(1))).to(raise_error(ValueError, "No such task"))
+    with it("throws an exception when getting a task by ID"):
+      expect(lambda: TaskList().get_task_by_id(TaskId(1))).to(raise_error(ValueError, "No such task"))
+
+    with context("Adding tasks"):
+      with it("has count 1 after adding one task"):
+        task_list = TaskList()
+        task = Task(TaskId(1), "TODO")
+        task_list.add_task(task)
+        expect(task_list.count()).to(be(1))
+
+      with it("throws expection when adding a task with existing ID"):
+        task_list = TaskList()
+        task = Task(TaskId(1), "TODO")
+        task_list.add_task(task)
+        expect(
+          lambda: task_list.add_task(Task(TaskId(1), "todo"))).to(raise_error(ValueError, "Duplicate ID")
+        )
 
     with context("When sending today query"):
       with it("should return empty list"):
-        expect(QueryHandler(TaskList([])).handle_query("today")).to(be_empty)
+        expect(QueryHandler(TaskList()).handle_query("today")).to(be_empty)
 
     with description("When sending an empty command"):
       with it("throws an exception with empty command string"):
         expect(
-          lambda: CommandHandler(TaskList([])).handle_command("")
+          lambda: CommandHandler(TaskList()).handle_command("")
         ).to(raise_error(ValueError, "Invalid command"))
 
     with context("When sending a delete command"):
       with before.each:
-        self.command_handler = CommandHandler(TaskList([]))
+        self.command_handler = CommandHandler(TaskList())
 
       with it("throws an exception when command is not followed by an ID"):
         expect(
@@ -40,7 +55,7 @@ with description(TaskList) as self:
 
     with context("When sending a deadline command"):
       with before.each:
-        self.command_handler = CommandHandler(TaskList([]))
+        self.command_handler = CommandHandler(TaskList())
 
       with it("throws an exception when command does not start with deadline keyword"):      
         expect(
@@ -74,10 +89,11 @@ with description(TaskList) as self:
 
   with context("Given a task list with one task"):
     with before.each:
-      self.my_task_list = TaskList([Task(TaskId(1), "todo")])
+      self.my_task_list = TaskList()
+      self.my_task_list.add_tasks([Task(TaskId(1), "todo")])
 
-    with it("is not empty"):
-      expect(self.my_task_list.is_empty()).to(be_false)
+    with it("has count 1"):
+      expect(self.my_task_list.count()).to(be(1))
 
     with it("returns empty list when sent the today query"):
       expect(QueryHandler(self.my_task_list).handle_query("today")).to(be_empty)
@@ -85,7 +101,7 @@ with description(TaskList) as self:
     with context("When sent a delete command"):
       with it("deletes the single task"):
         CommandHandler(self.my_task_list).handle_command("delete 1")
-        expect(self.my_task_list.is_empty()).to(be_true)
+        expect(self.my_task_list.count()).to(be(0))
  
     with it("throws an exception when deadline command is given wrong ID"):
       expect(
@@ -115,10 +131,11 @@ with description(TaskList) as self:
     with before.each:
       self.task1 = Task(TaskId(1), "todo")
       self.task2 = Task(TaskId(2), "todo")
-      self.my_task_list = TaskList([self.task1, self.task2])
+      self.my_task_list = TaskList()
+      self.my_task_list.add_tasks([self.task1, self.task2])
 
-    with it("is not empty"):
-      expect(self.my_task_list.is_empty()).to(equal(False))
+    with it("has count 2"):
+      expect(self.my_task_list.count()).to(be(2))
 
     with it("retrieves second task by ID"):
       expect(self.my_task_list.get_task_by_id(TaskId(2))).to(equal(self.task2))

@@ -31,18 +31,16 @@ As discussed in the first course, let's first make a plan.
 
 ### Making a plan first
 
-1. Create a task with a mandatory integer ID and description as string
-    - Tasks with negative ID should not be allowed
-    - Empty descriptions should not be allowed
-    - Deadline should not be set initially
-2. Create an empty task list
-    - Should be empty
-    - Should throw an exception when requesting a task by ID
-3. Create a filled task list
-    - Make the constructor accept an empty task list
-    - Make the constructor accept a task list with a single task
-    - Make the constructor accpet a task list with two tasks
-4. Make the task list accept the `deadline <ID> <date>` command
+Like the stack kata, we'll start with an empty task list first. The simplest thing that could possibly work!
+
+1. An new/empty task list
+    - Contains zero tasks / has a zero task count (hint!)
+    - Throws an exception when we request a task by ID
+2. Implement the possibility to add one or more tasks to the task list
+    - Verify that the task(s) is/are returned when getting the list of tasks
+    - Verify that the right task(s) is/are returned when retrieved by ID
+    - Specify we expect an exception when you try to add another task with an existing ID
+3. Make the task list accept the `deadline <ID> <date>` command
     - Throw an exception when the command token is not `deadline`
     - Throw an exception if the `deadline` is not followed by an integer and date
     - Throw an exception when task with `<ID>` does not exist
